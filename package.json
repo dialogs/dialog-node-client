@@ -1,6 +1,6 @@
 {
   "name": "@dlghq/dialog-node-client",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "src/index.js",
   "author": "Nikita Gusakov <gusnkt@gmail.com>",
   "license": "UNLICENSED",
