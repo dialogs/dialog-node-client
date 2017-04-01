@@ -16,6 +16,7 @@ const path = require('path');
 const createClient = require('@dlghq/dialog-node-client');
 
 createClient({
+  quiet: false, // by default
   endpoints: ['wss://ws1.dlg.im'],
   storageFileName: path.join(__dirname, 'storage.json')
 }).then((messenger) => {
@@ -24,3 +25,5 @@ createClient({
   console.trace(error);
 });
 ```
+
+[More examples](examples/)

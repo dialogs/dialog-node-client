@@ -1,5 +1,13 @@
+const fs = require('fs');
 const path = require('path');
 const createClient = require('../src');
+
+const image = {
+  mime: 'image/png',
+  base64: 'iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQMAAABKLAcXAAAAA1BMVEUAVtYkK7DpAAAAE0lEQVR4XmOgKxgFo2AUjIJRAAAFeAABfJyg3QAAAABJRU5ErkJggg==',
+  width: 100,
+  height: 100
+};
 
 createClient({
   endpoints: ['wss://ws1.dlg.im'],
@@ -20,7 +28,15 @@ createClient({
     }
   });
 }).then((messenger) => {
-  console.log('my uid: ', messenger.getUid());
+  const peer = { type: 'user', id: 10 };
+  const file = new File([Buffer.from(image.base64, 'base64')], 'test.png');
+  const preview = {
+    width: image.width,
+    height: image.height,
+    base64: `data:${image.mime};base64,${image.base64}`
+  };
+
+  messenger.sendPhotoWithPreview(peer, file, image.width, image.height, preview);
 }).catch((error) => {
   console.trace(error);
 });

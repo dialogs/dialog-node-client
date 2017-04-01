@@ -6,6 +6,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@dlghq/dialog-java-core": "^1.0.745",
+    "chalk": "1.1.3",
+    "jsdom": "9.12.0",
     "ws": "2.2.2"
   }
 }

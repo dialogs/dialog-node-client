@@ -1,70 +1,52 @@
-const WebSocket = require('ws');
+const fs = require('fs');
+const path = require('path');
+const { jsdom } = require('jsdom');
 const LocalStorage = require('./LocalStorage');
 
 function patchScope({ storageFileName }) {
-  const localStorage = new LocalStorage(storageFileName);
+  const html = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
+  const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36';
 
-  function addEventListener(eventName, callback) {
-    if (eventName === 'DOMContentLoaded') {
-      callback({});
-    }
-  }
+  const document = jsdom(html, { userAgent });
+  const window = document.defaultView;
 
-  const document = {
-    addEventListener,
-    write(text) {},
-    getElementById(id) {
-      return {
-        parentNode: {
-          removeChild() {}
-        }
-      };
-    },
-    getElementsByTagName(name) {
-      return [];
-    },
-    createElement() {
-      return {};
-    }
-  };
-
-  const navigator = {
-    appCodeName: 'Mozilla',
-    language: 'en-US',
-    languages: ['en', 'en-US'],
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
-  };
-
-  const location = {
-    hash: '#/auth',
-    host: 'app.dlg.im',
-    href: 'https://app.dlg.im/#/auth',
-    pathname: '/',
-    port: '',
-    protocol: 'https:',
-    search: ''
-  };
-
-  global.window = global;
+  const storage = new LocalStorage(storageFileName);
 
   Object.assign(window, {
-    WebSocket,
+    window,
     document,
-    location,
-    navigator,
-    localStorage,
-    addEventListener,
-    alert(message) {
-      throw new Error(`Alert: ${message}`);
-    }
+    WebSocket: require('ws'),
+    localStorage: storage,
+    sessionStorage: storage
   });
 
-  Object.assign(document, {
-    location,
-    navigator
+  const keys = [
+    'window',
+    'document',
+    'location',
+    'navigator',
+    'localStorage',
+    'sessionStorage',
+
+    'Blob',
+    'File',
+    'Event',
+    'WebSocket',
+    'FileReader',
+    'XMLHttpRequest'
+  ];
+
+  keys.forEach((key) => {
+    global[key] = window[key];
   });
+
+  File.create = (filePathName) => {
+    const content = fs.readFileSync(filePathName);
+    const fileName = path.basename(filePathName);
+    return new File([content], fileName);
+  };
+
+  document.dispatchEvent(new Event('DOMContentLoaded'));
 }
 
 module.exports = patchScope;
-
-

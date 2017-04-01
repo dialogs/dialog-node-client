@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const createClient = require('../src');
 
@@ -20,7 +21,8 @@ createClient({
     }
   });
 }).then((messenger) => {
-  console.log('my uid: ', messenger.getUid());
+  const peer = { type: 'user', id: 10 };
+  messenger.sendFile(peer, File.create(__filename));
 }).catch((error) => {
   console.trace(error);
 });
