@@ -13,7 +13,7 @@ function formatLogLevel(level) {
       return chalk.yellow('[W]');
 
     case 'e':
-      return chalk.red('[W]');
+      return chalk.red('[E]');
 
     default:
       return chalk.gray(`[${level.toUpperCase()}]`);
