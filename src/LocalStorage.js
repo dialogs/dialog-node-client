@@ -22,9 +22,17 @@ class LocalStorage {
     this.storage[key] = value;
     this.persist();
   }
-  
+
+  setJSONItem(key, value, replacer) {
+    this.setItem(key, JSON.stringify(value, replacer));
+  }
+
   getItem(key) {
     return this.storage[key] || null;
+  }
+
+  getJSONItem(key, reviver) {
+    return JSON.parse(this.getItem(key), reviver);
   }
 
   clear() {

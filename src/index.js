@@ -5,10 +5,12 @@ function createClient({ storageFileName, endpoints, quiet }) {
   patchScope({ storageFileName });
 
   const createCore = require('@dlghq/dialog-java-core');
+  const AsyncStorage = require('./AsyncStorage');
 
   return new Promise((resolve) => {
     createCore({
       endpoints,
+      asyncStorage: new AsyncStorage(window.localStorage),
       customAppName: 'Dialog Test',
       apiAppName: 'Dialog Test App',
       apiAppId: 4,
