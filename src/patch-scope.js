@@ -1,23 +1,21 @@
 const fs = require('fs');
 const path = require('path');
 const { jsdom } = require('jsdom');
-const LocalStorage = require('./LocalStorage');
+const WebStorage = require('./runtime/WebStorage');
 
-function patchScope({ storageFileName }) {
+function patchScope() {
   const html = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
   const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36';
 
   const document = jsdom(html, { userAgent });
   const window = document.defaultView;
 
-  const storage = new LocalStorage(storageFileName);
-
   Object.assign(window, {
     window,
     document,
     WebSocket: require('ws'),
-    localStorage: storage,
-    sessionStorage: storage
+    localStorage: new WebStorage(),
+    sessionStorage: new WebStorage()
   });
 
   const keys = [
@@ -46,7 +44,9 @@ function patchScope({ storageFileName }) {
     return new File([content], fileName);
   };
 
-  document.dispatchEvent(new Event('DOMContentLoaded'));
+  setImmediate(() => {
+    document.dispatchEvent(new Event('DOMContentLoaded'))
+  });
 }
 
 module.exports = patchScope;

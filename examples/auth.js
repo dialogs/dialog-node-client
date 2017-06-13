@@ -1,9 +1,12 @@
+/*
+ * Copyright 2017 dialog LLC <info@dlg.im>
+ */
+
 const path = require('path');
 const createClient = require('../src');
 
 createClient({
-  endpoints: ['wss://ws1.dlg.im'],
-  storageFileName: path.join(__dirname, 'storage.json')
+  endpoints: ['wss://ws1.dlg.im']
 }).then((messenger) => {
   return new Promise((resolve, reject) => {
     if (messenger.isLoggedIn()) {

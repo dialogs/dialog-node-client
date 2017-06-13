@@ -1,3 +1,7 @@
+/*
+ * Copyright 2017 dialog LLC <info@dlg.im>
+ */
+
 const fs = require('fs');
 const path = require('path');
 const createClient = require('../src');

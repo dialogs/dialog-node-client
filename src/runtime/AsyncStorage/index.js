@@ -1,46 +1,8 @@
-class Index {
-  constructor(json) {
-    this.json = json;
-  }
+/*
+ * Copyright 2017 dialog LLC <info@dlg.im>
+ */
 
-  get(id) {
-    const raw = this.json[id];
-    return raw ? Buffer.from(raw, 'base64') : null;
-  }
-
-  has(id) {
-    return Boolean(this.json[id]);
-  }
-
-  set(id, value) {
-    this.json[id] = value;
-  }
-
-  delete(id) {
-    delete this.json[id];
-  }
-
-  forEach(callback) {
-    Object.keys(this.json).forEach((key) => {
-      callback(key, this.get(key));
-    });
-  }
-
-  clear() {
-    Object.keys(this.json).forEach((key) => {
-      delete this.json[key];
-    });
-  }
-
-  toJSON() {
-    const json = {};
-    Object.keys(this.json).forEach((key) => {
-      json[key] = Buffer.from(this.json[key]).toString('base64');
-    });
-
-    return json;
-  }
-}
+const StorageIndex = require('./StorageIndex');
 
 class AsyncStorage {
   constructor(localStorage) {
@@ -50,12 +12,12 @@ class AsyncStorage {
   transaction(type, keyspace, resolve, reject, callback) {
     try {
       const storageKey = `ngkv_${keyspace}`;
-      const index = new Index(this.storage.getJSONItem(storageKey) || {});
+      const index = new StorageIndex(this.storage.getItem(storageKey, {}));
 
       resolve(callback(index));
 
       if (type === 'readwrite') {
-        this.storage.setJSONItem(storageKey, index);
+        this.storage.setItem(storageKey, index.toJSON());
       }
     } catch (e) {
       console.error(e);
