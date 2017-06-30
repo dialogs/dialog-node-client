@@ -5,10 +5,9 @@
   "author": "Nikita Gusakov <gusnkt@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@dlghq/dialog-java-core": "1.0.939",
-    "chalk": "1.1.3",
+    "@dlghq/dialog-java-core": "1.0.973",
     "jsdom": "9.12.0",
-    "pino": "4.5.4",
+    "pino": "4.6.0",
     "ws": "3.0.0"
   }
 }

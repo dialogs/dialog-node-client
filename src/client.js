@@ -7,13 +7,14 @@ const patchScope = require('./patch-scope');
 const Logger = require('./runtime/Logger');
 const AsyncStorage = require('./runtime/AsyncStorage');
 
-function createClient({ endpoints, quiet }) {
+function createClient({ endpoints, phoneBook, quiet }) {
   patchScope();
   const createCore = require('@dlghq/dialog-java-core');
 
   return new Promise((resolve) => {
     createCore({
       endpoints,
+      phoneBook,
       logger: quiet ? null: new Logger(),
       asyncStorage: new AsyncStorage(window.localStorage),
       customAppName: 'Dialog Test',
