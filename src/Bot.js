@@ -3,25 +3,33 @@
  */
 
 const EventEmitter = require('events');
+const Promise = require('bluebird');
 const createClient = require('./client');
+const getPhotoSize = require('./utils/getPhotoSize');
+const getPhotoPreview = require('./utils/getPhotoPreview');
 
 class Bot extends EventEmitter {
-  constructor(endpoints, username, password) {
+  constructor(endpoints, auth) {
     super();
 
     this.ready = createClient({ endpoints }).then((messenger) => {
-      console.log(localStorage);
       return new Promise((resolve, reject) => {
         const onSuccess = () => resolve(messenger);
-        if (messenger.isLoggedIn()) {
-          messenger.login(onSuccess);
-        } else {
-          const onError = (tag, message) => reject(new Error(message, tag));
+        const onError = (tag, message) => reject(new Error(message, tag));
+
+        if (typeof auth.phone === 'string' && typeof auth.code === 'string') {
+          messenger.requestSms(
+            auth.phone,
+            () => messenger.sendCode(auth.code, onSuccess, onError)
+          );
+        } else if (typeof auth.username === 'string' && typeof auth.password === 'string') {
           messenger.startUserNameAuth(
-            username,
-            () => messenger.sendPassword(password, onSuccess, onError),
+            auth.username,
+            () => messenger.sendPassword(auth.password, onSuccess, onError),
             onError
           );
+        } else {
+          throw new Error('Auth credentials not defined');
         }
       }).then((messenger) => {
         messenger.onUpdate((update) => {
@@ -33,10 +41,19 @@ class Bot extends EventEmitter {
     });
   }
 
+  async getUid() {
+    const messenger = await this.ready;
+    return messenger.getUid();
+  }
+
   onAsync(eventName, callback) {
     this.on(eventName, (...args) => {
       callback(...args).catch((error) => this.emit('error', error));
     });
+  }
+
+  onMessage(callback) {
+    this.onAsync('MESSAGE_ADD', callback);
   }
 
   sendTextMessage(peer, text) {
@@ -45,15 +62,38 @@ class Bot extends EventEmitter {
     });
   }
 
-  sendFileMessage(peer, file) {
+  async sendFileMessage(peer, fileName) {
+    const messenger = await this.ready;
+    const file = await File.create(fileName);
+    messenger.sendMessage(peer, file);
+  }
+
+  async sendPhotoMessage(peer, fileName) {
+    const messenger = await this.ready;
+    const { file, size, preview } = await Promise.props({
+      file: File.create(fileName),
+      size: getPhotoSize(fileName),
+      preview: getPhotoPreview(fileName)
+    });
+
+    console.log({file, size, preview});
+
+    messenger.sendPhotoWithPreview(peer, file, size.width, size.height, preview);
+  }
+
+  loadFileUrls(files) {
     return this.ready.then((messenger) => {
-      messenger.sendMessage(peer, file);
+      return messenger.loadFileUrls(files);
     });
   }
 
-  sendImageMessage(peer, file, width, height, preview) {
-    return this.ready.then((messenger) => {
-      messenger.sendPhotoWithPreview(peer, file, width, height, preview);
+  loadFileUrl(file) {
+    return this.loadFileUrls([file]).then((urls) => {
+      if (urls.length) {
+        return urls[0].url;
+      }
+
+      return null;
     });
   }
 }

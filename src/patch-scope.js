@@ -38,11 +38,27 @@ function patchScope() {
     global[key] = window[key];
   });
 
-  File.create = (filePathName) => {
-    const content = fs.readFileSync(filePathName);
-    const fileName = path.basename(filePathName);
-    return new File([content], fileName);
-  };
+  Object.assign(File, {
+    async create(filePathName) {
+      const content = await new Promise((resolve, reject) => {
+        fs.readFile(filePathName, (error, data) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(data);
+          }
+        });
+      });
+
+      const fileName = path.basename(filePathName);
+      return new File([content], fileName);
+    },
+    createSync(filePathName) {
+      const content = fs.readFileSync(filePathName);
+      const fileName = path.basename(filePathName);
+      return new File([content], fileName);
+    }
+  })
 
   setImmediate(() => {
     document.dispatchEvent(new Event('DOMContentLoaded'))
