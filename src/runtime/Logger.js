@@ -5,9 +5,9 @@
 const createLogger = require('pino');
 
 class Logger {
-  constructor() {
+  constructor(quiet) {
     this.logger = createLogger({
-      level: 'debug',
+      level: quiet ? 'error' : 'debug',
       prettyPrint: process.env.NODE_ENV !== 'production'
     });
   }

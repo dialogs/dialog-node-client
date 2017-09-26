@@ -15,7 +15,7 @@ function createClient({ endpoints, phoneBook, quiet }) {
     createCore({
       endpoints,
       phoneBook,
-      logger: quiet ? null: new Logger(),
+      logger: new Logger(quiet),
       asyncStorage: new AsyncStorage(window.localStorage),
       customAppName: 'Dialog Test',
       apiAppName: 'Dialog Test App',
