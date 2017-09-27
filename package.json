@@ -7,6 +7,10 @@
   ],
   "author": "Nikita Gusakov <gusnkt@gmail.com>",
   "license": "UNLICENSED",
+  "scripts": {
+    "postversion": "npm publish",
+    "postpublish": "git push --follow-tags"
+  },
   "dependencies": {
     "@dlghq/dialog-java-core": "1.0.1041",
     "bluebird": "3.5.0",
