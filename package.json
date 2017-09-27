@@ -2,16 +2,17 @@
   "name": "@dlghq/dialog-node-client",
   "version": "0.4.1",
   "main": "src/index.js",
+  "files": ["src"],
   "author": "Nikita Gusakov <gusnkt@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@dlghq/dialog-java-core": "1.0.991",
+    "@dlghq/dialog-java-core": "1.0.1041",
     "bluebird": "3.5.0",
     "jsdom": "9.12.0",
-    "pino": "4.7.1",
-    "ws": "3.1.0"
+    "pino": "4.7.2",
+    "ws": "3.2.0"
   },
   "optionalDependencies": {
-    "sharp": "0.18.2"
+    "sharp": "0.18.4"
   }
 }
