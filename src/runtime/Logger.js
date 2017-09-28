@@ -13,22 +13,24 @@ class Logger {
   }
 
   log(tag, message) {
-    this.logger.debug(tag + ' ' + message);
+    this.logger.debug(tag + ': ' + message);
   }
 
-  warning(tag, message, error) {
-    if (error) {
+  warning(tag, message, rawError) {
+    if (rawError) {
+      const error = rawError.backingJsObject || rawError;
       this.logger.warn(error, tag);
     } else {
-      this.logger.warn(tag + ' ' + message);
+      this.logger.warn(tag + ': ' + message);
     }
   }
 
-  error(tag, message, error) {
-    if (error) {
+  error(tag, message, rawError) {
+    if (rawError) {
+      const error = rawError.backingJsObject || rawError;
       this.logger.error(error, tag);
     } else {
-      this.logger.error(tag + ' ' + message);
+      this.logger.error(tag + ': ' + message);
     }
   }
 }
