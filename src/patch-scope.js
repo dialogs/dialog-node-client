@@ -33,6 +33,7 @@ function patchScope() {
     'Event',
     'WebSocket',
     'FileReader',
+    'Notification',
     'XMLHttpRequest'
   ];
 
