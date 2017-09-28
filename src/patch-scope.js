@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { jsdom } = require('jsdom');
 const WebStorage = require('./runtime/WebStorage');
+const Notification = require('./runtime/Notification');
 
 function patchScope() {
   const html = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
@@ -13,6 +14,7 @@ function patchScope() {
   Object.assign(window, {
     window,
     document,
+    Notification,
     WebSocket: require('ws'),
     localStorage: new WebStorage(),
     sessionStorage: new WebStorage()
