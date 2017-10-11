@@ -5,8 +5,6 @@
 const EventEmitter = require('events');
 const Promise = require('bluebird');
 const createClient = require('./client');
-const getPhotoSize = require('./utils/getPhotoSize');
-const getPhotoPreview = require('./utils/getPhotoPreview');
 
 class Bot extends EventEmitter {
   constructor(endpoints, auth) {
@@ -66,19 +64,6 @@ class Bot extends EventEmitter {
     const messenger = await this.ready;
     const file = await File.create(fileName);
     messenger.sendMessage(peer, file);
-  }
-
-  async sendPhotoMessage(peer, fileName) {
-    const messenger = await this.ready;
-    const { file, size, preview } = await Promise.props({
-      file: File.create(fileName),
-      size: getPhotoSize(fileName),
-      preview: getPhotoPreview(fileName)
-    });
-
-    console.log({file, size, preview});
-
-    messenger.sendPhotoWithPreview(peer, file, size.width, size.height, preview);
   }
 
   loadFileUrls(files) {
