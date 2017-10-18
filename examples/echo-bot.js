@@ -5,12 +5,11 @@
 const path = require('path');
 const { Bot } = require('../src');
 
-const bot = new Bot(
-  // endpoints
-  ['wss://ws1.dlg.im'],
-  // user credentials
-  { phone: '75555555555', code: '5555' }
-);
+const bot = new Bot({
+  endpoints: ['wss://ws1.dlg.im'],
+  phone: '75555555555',
+  code: '5555'
+});
 
 bot.onMessage(async (update) => {
   // get self uid

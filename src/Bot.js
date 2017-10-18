@@ -3,27 +3,29 @@
  */
 
 const EventEmitter = require('events');
-const Promise = require('bluebird');
 const createClient = require('./client');
 
 class Bot extends EventEmitter {
-  constructor(endpoints, auth) {
+  constructor(options) {
     super();
 
-    this.ready = createClient({ endpoints }).then((messenger) => {
+    this.ready = createClient({
+      quiet: options.quiet,
+      endpoints: options.endpoints
+    }).then((messenger) => {
       return new Promise((resolve, reject) => {
         const onSuccess = () => resolve(messenger);
         const onError = (tag, message) => reject(new Error(message, tag));
 
-        if (typeof auth.phone === 'string' && typeof auth.code === 'string') {
+        if (typeof options.phone === 'string' && typeof options.code === 'string') {
           messenger.requestSms(
-            auth.phone,
-            () => messenger.sendCode(auth.code, onSuccess, onError)
+            options.phone,
+            () => messenger.sendCode(options.code, onSuccess, onError)
           );
-        } else if (typeof auth.username === 'string' && typeof auth.password === 'string') {
+        } else if (typeof options.username === 'string' && typeof options.password === 'string') {
           messenger.startUserNameAuth(
-            auth.username,
-            () => messenger.sendPassword(auth.password, onSuccess, onError),
+            options.username,
+            () => messenger.sendPassword(options.password, onSuccess, onError),
             onError
           );
         } else {
@@ -39,11 +41,6 @@ class Bot extends EventEmitter {
     });
   }
 
-  async getUid() {
-    const messenger = await this.ready;
-    return messenger.getUid();
-  }
-
   onAsync(eventName, callback) {
     this.on(eventName, (...args) => {
       callback(...args).catch((error) => this.emit('error', error));
@@ -54,10 +51,23 @@ class Bot extends EventEmitter {
     this.onAsync('MESSAGE_ADD', callback);
   }
 
-  sendTextMessage(peer, text) {
-    return this.ready.then((messenger) => {
-      messenger.sendMessage(peer, text);
-    });
+  onInteractiveEvent(callback) {
+    this.onAsync('INTERACTIVE_EVENT', callback);
+  }
+
+  async getUid() {
+    const messenger = await this.ready;
+    return messenger.getUid();
+  }
+
+  async sendTextMessage(peer, text) {
+    const messenger = await this.ready;
+    messenger.sendMessage(peer, text);
+  }
+
+  async sendInteractiveMessage(peer, text, actions, attach) {
+    const messenger = await this.ready;
+    messenger.sendInteractiveMessage(peer, text, actions, attach);
   }
 
   async sendFileMessage(peer, fileName) {
@@ -66,20 +76,18 @@ class Bot extends EventEmitter {
     messenger.sendMessage(peer, file);
   }
 
-  loadFileUrls(files) {
-    return this.ready.then((messenger) => {
-      return messenger.loadFileUrls(files);
-    });
+  async loadFileUrls(files) {
+    const messenger = await this.ready;
+    return messenger.loadFileUrls(files);
   }
 
-  loadFileUrl(file) {
-    return this.loadFileUrls([file]).then((urls) => {
-      if (urls.length) {
-        return urls[0].url;
-      }
+  async loadFileUrl(file) {
+    const urls = await this.loadFileUrls([file]);
+    if (urls.length) {
+      return urls[0].url;
+    }
 
-      return null;
-    });
+    return null;
   }
 }
 
