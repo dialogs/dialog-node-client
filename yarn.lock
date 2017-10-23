@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@dlghq/dialog-java-core@1.0.1073":
-  version "1.0.1073"
-  resolved "https://registry.npmjs.org/@dlghq/dialog-java-core/-/dialog-java-core-1.0.1073.tgz#0b136895164e46e6acc6cbadbb1e8b7a58ad4959"
+"@dlghq/dialog-java-core@1.0.1085":
+  version "1.0.1085"
+  resolved "https://registry.npmjs.org/@dlghq/dialog-java-core/-/dialog-java-core-1.0.1085.tgz#914b79dbc1330e32b612892b9be6e9035381349d"
 
 abab@^1.0.3:
   version "1.0.4"
@@ -407,9 +407,9 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
 
-pino@4.7.3:
-  version "4.7.3"
-  resolved "https://registry.npmjs.org/pino/-/pino-4.7.3.tgz#babb7fff1f9cf67c81b2a177fdd8035a59206485"
+pino@4.8.0:
+  version "4.8.0"
+  resolved "https://registry.npmjs.org/pino/-/pino-4.8.0.tgz#ffe37684233ebf33ffa58140d7fb5c1f7e170ecd"
   dependencies:
     chalk "^2.0.1"
     fast-json-parse "^1.0.0"

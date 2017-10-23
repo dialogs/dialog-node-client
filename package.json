@@ -12,9 +12,9 @@
     "postpublish": "git push --follow-tags"
   },
   "dependencies": {
-    "@dlghq/dialog-java-core": "1.0.1073",
+    "@dlghq/dialog-java-core": "1.0.1085",
     "jsdom": "9.12.0",
-    "pino": "4.7.3",
+    "pino": "4.8.0",
     "ws": "3.2.0"
   }
 }
