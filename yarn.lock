@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@dlghq/dialog-java-core@1.0.1085":
-  version "1.0.1085"
-  resolved "https://registry.npmjs.org/@dlghq/dialog-java-core/-/dialog-java-core-1.0.1085.tgz#914b79dbc1330e32b612892b9be6e9035381349d"
+"@dlghq/dialog-java-core@1.0.1088":
+  version "1.0.1088"
+  resolved "https://registry.npmjs.org/@dlghq/dialog-java-core/-/dialog-java-core-1.0.1088.tgz#cde30c85f81a58a0ccd0b205fc4314896387d870"
 
 abab@^1.0.3:
   version "1.0.4"

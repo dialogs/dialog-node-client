@@ -52,7 +52,12 @@ class Bot extends EventEmitter {
   }
 
   onInteractiveEvent(callback) {
-    this.onAsync('INTERACTIVE_EVENT', callback);
+    this.onAsync('INTERACTIVE_EVENT', async (event) => {
+      const messenger = await this.ready;
+      const ref = await messenger.getMessageRef(event.mid);
+
+      await callback(Object.assign(event, ref));
+    });
   }
 
   async getUid() {
@@ -65,9 +70,19 @@ class Bot extends EventEmitter {
     messenger.sendMessage(peer, text);
   }
 
+  async editTextMessage(peer, rid, text) {
+    const messenger = await this.ready;
+    await messenger.editMessage(peer, rid, text);
+  }
+
   async sendInteractiveMessage(peer, text, actions, attach) {
     const messenger = await this.ready;
     messenger.sendInteractiveMessage(peer, text, actions, attach);
+  }
+
+  async editInteractiveMessage(peer, rid, text, actions) {
+    const messenger = await this.ready;
+    await messenger.editInteractiveMessage(peer, rid, text, actions);
   }
 
   async sendFileMessage(peer, fileName) {
