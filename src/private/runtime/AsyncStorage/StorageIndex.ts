@@ -2,8 +2,13 @@
  * Copyright 2017 dialog LLC <info@dlg.im>
  */
 
-class StorageIndex {
-  constructor(json) {
+/**
+ * @private
+ */
+class StorageIndex<T> {
+  private json: { [key: string]: T };
+
+  constructor(json: { [key: string]: T }) {
     this.json = json;
   }
 
@@ -40,4 +45,4 @@ class StorageIndex {
   }
 }
 
-module.exports = StorageIndex;
+export default StorageIndex;

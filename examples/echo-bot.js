@@ -3,7 +3,7 @@
  */
 
 const path = require('path');
-const { Bot } = require('../src');
+const { Bot } = require('../src/index');
 
 const bot = new Bot({
   endpoints: ['wss://ws1.dlg.im'],
