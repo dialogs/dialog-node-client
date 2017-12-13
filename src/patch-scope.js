@@ -1,8 +1,8 @@
-import fs = require('fs');
-import path = require('path');
-import { jsdom } from 'jsdom';
-import WebStorage from './runtime/WebStorage';
-import Notification from './runtime/Notification';
+const fs = require('fs');
+const path = require('path');
+const { jsdom } = require('jsdom');
+const WebStorage = require('./runtime/WebStorage');
+const Notification = require('./runtime/Notification');
 
 function patchScope() {
   const html = '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>';
@@ -54,18 +54,18 @@ function patchScope() {
       });
 
       const fileName = path.basename(filePathName);
-      return new File([(content as Blob)], fileName);
+      return new File([content], fileName);
     },
     createSync(filePathName) {
       const content = fs.readFileSync(filePathName);
       const fileName = path.basename(filePathName);
       return new File([content], fileName);
     }
-  });
+  })
 
   setImmediate(() => {
-    document.dispatchEvent(new Event('DOMContentLoaded'));
+    document.dispatchEvent(new Event('DOMContentLoaded'))
   });
 }
 
-export default patchScope;
+module.exports = patchScope;

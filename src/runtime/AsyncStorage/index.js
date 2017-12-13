@@ -2,17 +2,11 @@
  * Copyright 2017 dialog LLC <info@dlg.im>
  */
 
-import WebStorage from '../WebStorage';
-import StorageIndex from './StorageIndex';
+const StorageIndex = require('./StorageIndex');
 
-/**
- * @private
- */
-class AsyncStorage<T> {
-  private storage: WebStorage<T>;
-
-  constructor(storage: WebStorage<T>) {
-    this.storage = storage;
+class AsyncStorage {
+  constructor(localStorage) {
+    this.storage = localStorage;
   }
 
   transaction(type, keyspace, resolve, reject, callback) {
@@ -97,10 +91,10 @@ class AsyncStorage<T> {
   }
 
   clear(keyspace, resolve, reject) {
-    this.transaction('readwrite', keyspace, resolve, reject, (index) => {
+    this.transaction('readwrite', resolve, reject, (index) => {
       index.clear();
     });
   }
 }
 
-export default AsyncStorage;
+module.exports = AsyncStorage;

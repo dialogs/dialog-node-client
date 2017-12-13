@@ -1,13 +1,11 @@
 Dialog Node.js client
 =====================
 
-[Documentation](https://dialogs.github.io/dialog-node-client)
-
 Installation
 ------------
 
-```bash
-npm install @dlghq/dialog-node-client
+```
+yarn add @dlghq/dialog-node-client
 ````
 
 Usage
@@ -17,18 +15,29 @@ Usage
 const path = require('path');
 const { Bot } = require('@dlghq/dialog-node-client');
 
-const bot = new Bot({
-  endpoints: ['wss://ws1.dlg.im'],
-  phone: '75555555555', 
-  code: '5555'
-});
+const bot = new Bot(
+  // endpoints
+  ['wss://ws1.dlg.im'],
+  // user credentials
+  { phone: '75555555555', code: '5555' }
+);
 
-bot.onMessage(async (peer, message) => {
+bot.onMessage(async (update) => {
   // get self uid
   const uid = await bot.getUid();
-  
-  if (message.content.type === 'text') {
-    await bot.sendTextMessage(peer, message.content.text);
+
+  // check if message contents photo
+  if (update.content.type === 'photo') {
+    // load photo url
+    const url = await bot.loadFileUrl(update.content.file);
+    // and send it back to the client
+    await bot.sendTextMessage(update.peer, `Thanks for photo: ${url}`);
+
+    // send file as image
+    await bot.sendPhotoMessage(update.peer, path.resolve(__dirname, 'dinotocat.png'));
+  } else {
+    // send text message
+    await bot.sendTextMessage(update.peer, 'Hello =)');
   }
 });
 
@@ -38,3 +47,5 @@ bot.on('error', (error) => {
   process.exit(1);
 });
 ```
+
+[More examples](examples/)

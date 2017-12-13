@@ -3,15 +3,12 @@
   "version": "0.8.1",
   "main": "src/index.js",
   "files": [
-    "lib"
+    "src"
   ],
   "author": "Nikita Gusakov <gusnkt@gmail.com>",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "rm -rf lib/ && tsc",
-    "postbuild": "rm -rf docs && typedoc src/ --excludeExternals --excludePrivate --mode file --out docs --exclude src/private/**/*.ts",
     "postversion": "npm publish",
-    "prepublish": "npm run build",
     "postpublish": "git push --follow-tags"
   },
   "dependencies": {
@@ -19,12 +16,5 @@
     "jsdom": "9.12.0",
     "pino": "4.10.2",
     "ws": "3.3.2"
-  },
-  "devDependencies": {
-    "@types/node": "8.0.53",
-    "@types/pino": "^4.7.0",
-    "documentation": "^5.3.3",
-    "typedoc": "0.9.0",
-    "typescript": "2.6.2"
   }
 }

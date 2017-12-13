@@ -4,11 +4,8 @@
 
 /**
  * In-memory local/session-storage implementation.
- * @private
  */
-class WebStorage<T> {
-  storage: { [key: string]: T };
-
+class WebStorage {
   constructor() {
     this.storage = {};
   }
@@ -30,4 +27,4 @@ class WebStorage<T> {
   }
 }
 
-export default WebStorage;
+module.exports = WebStorage;

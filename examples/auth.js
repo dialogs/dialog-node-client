@@ -3,7 +3,7 @@
  */
 
 const path = require('path');
-const createClient = require('../src/index');
+const createClient = require('../src');
 
 createClient({
   endpoints: ['wss://ws1.dlg.im']

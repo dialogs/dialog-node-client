@@ -2,26 +2,21 @@
  * Copyright 2017 dialog LLC <info@dlg.im>
  */
 
-import pino = require('pino');
+const createLogger = require('pino');
 
-/**
- * @private
- */
 class Logger {
-  logger: pino.Logger;
-
-  constructor(quiet: boolean) {
-    this.logger = pino({
+  constructor(quiet) {
+    this.logger = createLogger({
       level: quiet ? 'error' : 'debug',
       prettyPrint: process.env.NODE_ENV !== 'production'
     });
   }
 
-  log(tag: string, message: string) {
+  log(tag, message) {
     this.logger.debug(tag + ': ' + message);
   }
 
-  warning(tag: string, message: string, rawError?: any) {
+  warning(tag, message, rawError) {
     if (rawError) {
       const error = rawError.backingJsObject || rawError;
       this.logger.warn(error, tag);
@@ -30,7 +25,7 @@ class Logger {
     }
   }
 
-  error(tag: string, message: string, rawError?: any) {
+  error(tag, message, rawError) {
     if (rawError) {
       const error = rawError.backingJsObject || rawError;
       this.logger.error(error, tag);
@@ -40,4 +35,4 @@ class Logger {
   }
 }
 
-export default Logger;
+module.exports = Logger;

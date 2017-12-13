@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const createClient = require('../src/index');
+const createClient = require('../src');
 
 const image = {
   mime: 'image/png',
